@@ -1,9 +1,8 @@
-console.log("HELLO WORLD!")
-
-const tickDisplayedPointCloud = (i, pcs) => {
+const tickDisplayedPointCloud = (i) => {
+    const pcs = window.viewer.scene.pointclouds
     pcs[i].visible = false
     pcs[(i+1) % pcs.length].visible = true
-    setTimeout( () => tickDisplayedPointCloud((i + 1) % pcs.length, pcs), 250)
+    setTimeout( () => tickDisplayedPointCloud((i + 1) % pcs.length), 250)
 }
 
 // takes an array of objects {name: "lion", path: "./lion/ept.json"} 
@@ -27,16 +26,7 @@ const loadPointcloudsInOrder = (resources) => {
 
             viewer.fitToScreen(0.5);
         }
-        //go()
-        tickDisplayedPointCloud(0, window.viewer.scene.pointclouds)
+        tickDisplayedPointCloud(0)
     })
 }
 
-
-const go = () => {
-    const pcs = window.viewer.scene.pointclouds
-    console.log("Testing testing 123")
-    console.log(pcs[0])
-    //function to hide #i pointcloud and show #i+1 pointcloud
-    tickDisplayedPointCloud(0, pcs)
-}
