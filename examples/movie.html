@@ -71,71 +71,14 @@
           '180906_190202', '180907_010157', '180907_070205', '180907_130156',
           '180907_190158', '180908_010159', '180908_070200', '180908_130156',
           '180908_190159' ]
-         
-        //const paths = times.map( (time) => `https://s3.amazonaws.com/na.entwine.io/crrel/atlas/South_${time}/ept.json` )
-        //console.log(paths)
-    
-        const lpc = async (resource, name) => new Promise( (resolve) =>
-            Potree.loadPointCloud(resource, name, resolve)) 
 
-        const pcPromises = times.map( (time) => {
-            const name = time
-            const resource = `https://s3.amazonaws.com/na.entwine.io/crrel/atlas/South_${time}/ept.json`
-            return lpc(resource, name)//.then( (event) => {
-                /*
-                viewer.scene.addPointCloud(event.pointcloud)
-                let material = event.pointcloud.material;
-                material.size = 1;
-                material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+        const resources = times.map( time => ({
+            name: time,
+            path: `https://s3.amazonaws.com/na.entwine.io/crrel/atlas/South_${time}/ept.json`
+        }))
 
-                viewer.fitToScreen(0.5);
-                */
-            //} )
-        })
+        loadPointcloudsInOrder(resources)
 
-        Promise.all(pcPromises).then( (events) => {
-            const pointclouds = events.map( (e) => e.pointcloud)
-            for(let pointcloud of pointclouds) {
-                pointcloud.visible = false
-                let material = pointcloud.material;
-                material.size = 1;
-                material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
-
-                window.viewer.scene.addPointCloud(pointcloud)
-
-                viewer.fitToScreen(0.5);
-            }
-        })
-        /*
-        Potree.loadPointCloud(path, time, function(e){
-            viewer.scene.addPointCloud(e.pointcloud);
-            console.log(e)
-
-            let material = e.pointcloud.material;
-            material.size = 1;
-            material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
-
-            viewer.fitToScreen(0.5);
-        });
-        */
-            
-        /* mostly works
-        for(let time of times) {
-            let path = `https://s3.amazonaws.com/na.entwine.io/crrel/atlas/South_${time}/ept.json`
-            Potree.loadPointCloud(path, time, function(e){
-                viewer.scene.addPointCloud(e.pointcloud);
-                console.log(e)
-
-                let material = e.pointcloud.material;
-                material.size = 1;
-                material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
-
-                viewer.fitToScreen(0.5);
-            });
-        }
-        */
-
-        /*
 		var getQueryParam = function(name) {
 			name = name.replace(/[\[\]]/g, "\\$&");
 			var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
@@ -151,7 +94,6 @@
             if (r.substr(0, http.length) == http) path = name;
             else path = "../pointclouds/" + name + "/ept.json";
         }
-        */
 
 	</script>
   </body>
