@@ -72,8 +72,8 @@
           '180907_190158', '180908_010159', '180908_070200', '180908_130156',
           '180908_190159' ]
          
-        const paths = times.map( (time) => `https://s3.amazonaws.com/na.entwine.io/crrel/atlas/South_${time}/ept.json` )
-        console.log(paths)
+        //const paths = times.map( (time) => `https://s3.amazonaws.com/na.entwine.io/crrel/atlas/South_${time}/ept.json` )
+        //console.log(paths)
     
         const lpc = async (resource, name) => new Promise( (resolve) =>
             Potree.loadPointCloud(resource, name, resolve)) 
@@ -96,12 +96,12 @@
         Promise.all(pcPromises).then( (events) => {
             const pointclouds = events.map( (e) => e.pointcloud)
             for(let pointcloud of pointclouds) {
-                console.log('yo wassup')
-                console.log(pointcloud)
-                window.viewer.scene.addPointCloud(pointcloud)
+                pointcloud.visible = false
                 let material = pointcloud.material;
                 material.size = 1;
                 material.pointSizeType = Potree.PointSizeType.ADAPTIVE;
+
+                window.viewer.scene.addPointCloud(pointcloud)
 
                 viewer.fitToScreen(0.5);
             }
