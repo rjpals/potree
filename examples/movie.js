@@ -1,18 +1,26 @@
-const tickDisplayedPointCloud = (i, ms, step, repititions) => {
-    if(repititions < 1) return
+const tickDisplayedPointCloud = (i, ms, step) => {
     const pcs = window.viewer.scene.pointclouds
-    console.log(pcs.length)
+    const iNext = (i + step) % pcs.length
     if(pcs.length > 0) {
-        pcs[(i+step) % pcs.length].visible = true
+        pcs[iNext].visible = true
         pcs[i].visible = false
     }
-    setTimeout( () => tickDisplayedPointCloud((i + step) % pcs.length, ms, step, repititions - 1), ms)
+    setTimeout( () =>
+        tickDisplayedPointCloud(window.movieIsPaused ? i : iNext, ms, step),
+    ms)
 }
 
-const startMovie = () => tickDisplayedPointCloud(0, 1500, 1, Infinity)
+window.movieIsPaused = true
+
+const startMovie = () => {
+    window.movieIsPaused = false
+    tickDisplayedPointCloud(0, 1500, 1)
+}
+
 
 // takes an array of objects {name: "lion", path: "./lion/ept.json"} 
 const loadPointcloudsInOrder = async (resources) => {
+    const scene = window.viewer.scene
 
     const pcPromises = resources.map( ({ name, path }) => {
         return new Promise(
@@ -22,7 +30,6 @@ const loadPointcloudsInOrder = async (resources) => {
 
     const events = await Promise.all(pcPromises)
     const pointclouds = events.map( (e) => e.pointcloud)
-    const scene = window.viewer.scene
     for(let pointcloud of pointclouds) {
         pointcloud.visible = false
         let material = pointcloud.material;
@@ -31,7 +38,7 @@ const loadPointcloudsInOrder = async (resources) => {
         material.pointColorType = Potree.PointColorType.ELEVATION
         material.elevationRange = [0, 180]
 
-        await scene.addPointCloud(pointcloud)
+        scene.addPointCloud(pointcloud)
 
         //viewer.fitToScreen(0.5);
     }
