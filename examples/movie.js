@@ -47,8 +47,14 @@ const glacierInit = async () => {
     }
 
     const scene = window.viewer.scene
-    scene.view.position.set(-4234485.586, 9990252.213, 36176.402)
-    scene.view.lookAt(new THREE.Vector3(-4246615.561, 9974709.709, 60.068));
+
+    // whole glacier
+    //scene.view.position.set(-4234485.586, 9990252.213, 36176.402)
+    //scene.view.lookAt(new THREE.Vector3(-4246615.561, 9974709.709, 60.068));
+
+    // calving front
+    scene.view.position.set(-4249014.856188621, 9977610.619899195, 830.4195105835867)
+    scene.view.lookAt(new THREE.Vector3(-4249191.406005859, 9977548.236999512, 121.2030029296875 ));
     startMovie()
 }
 

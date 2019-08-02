@@ -74,7 +74,7 @@ export function updateVisibilityStructures(pointclouds, camera, renderer) {
 		let camObjPos = new THREE.Vector3().setFromMatrixPosition(camMatrixObject);
 		camObjPositions.push(camObjPos);
 
-		if (pointcloud.visible && pointcloud.root !== null) {
+		if (pointcloud.root !== null) {
 			priorityQueue.push({pointcloud: i, node: pointcloud.root, weight: Number.MAX_VALUE});
 		}
 
@@ -132,7 +132,7 @@ export function updateVisibility(pointclouds, camera, renderer){
 	for(let pointcloud of pointclouds){
 
 		if(!pointcloud.visible){
-			continue;
+			//continue;
 		}
 
 		pointcloud.updateMatrixWorld();
@@ -291,7 +291,7 @@ export function updateVisibility(pointclouds, camera, renderer){
 		}
 
 		if (!visible) {
-			continue;
+			//continue;
 		}
 
 		// TODO: not used, same as the declaration?

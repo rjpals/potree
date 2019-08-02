@@ -64,5 +64,5 @@ const times = [
 window.movieResources = times.map( time => ({
     name: time,
     path: `https://s3.amazonaws.com/na.entwine.io/crrel/atlas/South_${time}/ept.json`
-}))
+})).filter((x, i) => i % 10 == 0)
 
