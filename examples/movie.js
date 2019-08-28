@@ -49,6 +49,6 @@ const glacierInit = async () => {
     const scene = window.viewer.scene
     scene.view.position.set(-4234485.586, 9990252.213, 36176.402)
     scene.view.lookAt(new THREE.Vector3(-4246615.561, 9974709.709, 60.068));
-    startMovie()
+    //startMovie()
 }
 

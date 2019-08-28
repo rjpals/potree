@@ -63,6 +63,9 @@ const times = [
 
 window.movieResources = times.map( time => ({
     name: time,
+    timestamp: new Date(toIso(time)),
     path: `https://s3.amazonaws.com/na.entwine.io/crrel/atlas/South_${time}/ept.json`
 }))
-
+function toIso(t) {
+    return '20' + t.slice(0,2) + '-' + t.slice(2,4) + '-' + t.slice(4,6) + 'T' + t.slice(7,9) + ':' + t.slice(9,11) + ':' + t.slice(11,13) + 'Z'
+}
