@@ -242,7 +242,7 @@ export class Viewer extends EventDispatcher{
 
 		// start rendering!
 		if(args.useDefaultRenderLoop === undefined || args.useDefaultRenderLoop === true){
-			requestAnimationFrame(this.loop.bind(this));
+			setTimeout(() => requestAnimationFrame(this.loop.bind(this)), 50);
 		}
 
 		this.loadGUI = this.loadGUI.bind(this);
@@ -1777,7 +1777,7 @@ export class Viewer extends EventDispatcher{
 	}
 
 	loop(timestamp){
-		requestAnimationFrame(this.loop.bind(this));
+		setTimeout( () => requestAnimationFrame(this.loop.bind(this)), 50);
 
 		let queryAll;
 		if(Potree.measureTimings){
