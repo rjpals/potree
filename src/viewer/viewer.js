@@ -116,10 +116,11 @@ export class Viewer extends EventDispatcher{
 		this.clipMethod = ClipMethod.INSIDE_ANY;
 
 		this.filterReturnNumberRange = [0, 7];
-		this.filterPointSourceIDRange = [0, 1e25];
 		this.filterNumberOfReturnsRange = [0, 7];
 		this.filterGPSTimeRange = [0, Infinity];
 		this.filterGPSTimeExtent = [0, 1];
+		this.filterPointSourceIDRange = [0, 10000];
+		this.filterPointSourceIDExtent = [0, 10000];
 
 		this.potreeRenderer = null;
 		this.edlRenderer = null;
@@ -579,6 +580,11 @@ export class Viewer extends EventDispatcher{
 	setFilterPointSourceIDRange(from, to){
 		this.filterPointSourceIDRange = [from, to];
 		this.dispatchEvent({'type': 'filter_point_source_id_range_changed', 'viewer': this});
+	}
+
+	setFilterPointSourceIDExtent(from, to){
+		this.filterPointSourceIDExtent = [from, to];
+		this.dispatchEvent({'type': 'filter_point_source_id_extent_changed', 'viewer': this});
 	}
 
 	setFilterNumberOfReturnsRange(from, to){
@@ -1341,6 +1347,8 @@ export class Viewer extends EventDispatcher{
 						this.setFilterGPSTimeExtent(min - border, max + border);
 						//this.setFilterGPSTimeRange(0, 1000 * 1000 * 1000);
 						this.setFilterGPSTimeRange(min, max);
+                        this.setFilterPointSourceIDRange(0, 255*255);
+                        this.setFilterPointSourceIDExtent(0, 255*255);
 
 						this.defaultGPSTimeChanged = true;
 					}
