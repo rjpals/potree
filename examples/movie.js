@@ -1,20 +1,25 @@
 const tickDisplayedPointCloud = (i, ms, step) => {
     const pcs = window.viewer.scene.pointclouds
     const iNext = (i + step) % pcs.length
+    const n = 9
     if(pcs.length > 0) {
-        pcs[iNext].visible = true
+        //pcs[iNext].visible = true
+        activeRange = pcs.slice(i + 1, i+n)
+        activeRange.forEach(pc => pc.visible = true)
         pcs[i].visible = false
+        psid = window.PSIDs[`South_${activeRange[0].name}`]
+        window.viewer.setFilterPointSourceIDRange(psid - 0.5, psid + 0.5)
     }
-    setTimeout( () =>
-        tickDisplayedPointCloud(window.movieIsPaused ? i : iNext, ms, step),
-    ms)
+    if(!window.movieIsPaused) {
+        setTimeout( () => tickDisplayedPointCloud(iNext, ms, step), ms)
+    }
 }
 
 window.movieIsPaused = true
 
 const startMovie = () => {
     window.movieIsPaused = false
-    tickDisplayedPointCloud(0, 1500, 1)
+    tickDisplayedPointCloud(0, 500, 1)
 }
 
 
@@ -49,6 +54,6 @@ const glacierInit = async () => {
     const scene = window.viewer.scene
     scene.view.position.set(-4234485.586, 9990252.213, 36176.402)
     scene.view.lookAt(new THREE.Vector3(-4246615.561, 9974709.709, 60.068));
-    //startMovie()
+    startMovie()
 }
 
