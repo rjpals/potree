@@ -1,19 +1,20 @@
 window.movie.paused = true
 
-const tickDisplayedPointCloud = (i, ms, step) => {
+const tickDisplayedPointCloud = () => {
     const pcs = window.viewer.scene.pointclouds
-    const iNext = (i + step) % pcs.length
-    const n = 4
+    const {preload, activePC} = window.movie
     if(pcs.length > 0) {
-        //pcs[iNext].visible = true
-        activeRange = circularSlice(pcs, i + 1, i+n)
+        activeRange = circularSlice(pcs, activePC, activePC + preload)
+        hiddenRange = circularSlice(pcs, activePC + preload, activePC)
         activeRange.forEach(pc => pc.visible = true)
-        pcs[i % pcs.length].visible = false
+        hiddenRange.forEach(pc => pc.visible = false)
+
         psid = window.movie.PSIDs[`South_${activeRange[0].name}`]
         window.viewer.setFilterPointSourceIDRange(psid - 0.5, psid + 0.5)
     }
     if(!window.movie.paused) {
-        setTimeout( () => tickDisplayedPointCloud(iNext, ms, step), ms)
+        window.movie.activePC++
+        setTimeout( () => tickDisplayedPointCloud(), window.movie.speed)
     }
 }
 
@@ -29,7 +30,10 @@ const circularSlice = (arr, start, end) => {
 
 const startMovie = () => {
     window.movie.paused = false
-    tickDisplayedPointCloud(0, 500, 1)
+    window.movie.speed = 1000
+    window.movie.preload = 6
+    window.movie.activePC = 0
+    tickDisplayedPointCloud()
 }
 
 // takes an array of objects {name: "lion", path: "./lion/ept.json"} 
