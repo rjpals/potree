@@ -135,9 +135,10 @@ const PSIDs = {
   "South_180828_070155": 71
 }
 
-window.PSIDs = PSIDs
+if(typeof window.movie == 'undefined') window.movie = {}
+window.movie.PSIDs = PSIDs
 
-window.movieResources = times.map( time => ({
+window.movie.resources = times.map( time => ({
     name: time,
     timestamp: new Date(toIso(time)),
     //path: `https://s3.amazonaws.com/na.entwine.io/crrel/atlas/South_${time}/ept.json`,

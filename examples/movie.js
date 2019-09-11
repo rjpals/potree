@@ -1,3 +1,5 @@
+window.movie.paused = true
+
 const tickDisplayedPointCloud = (i, ms, step) => {
     const pcs = window.viewer.scene.pointclouds
     const iNext = (i + step) % pcs.length
@@ -7,10 +9,10 @@ const tickDisplayedPointCloud = (i, ms, step) => {
         activeRange = circularSlice(pcs, i + 1, i+n)
         activeRange.forEach(pc => pc.visible = true)
         pcs[i % pcs.length].visible = false
-        psid = window.PSIDs[`South_${activeRange[0].name}`]
+        psid = window.movie.PSIDs[`South_${activeRange[0].name}`]
         window.viewer.setFilterPointSourceIDRange(psid - 0.5, psid + 0.5)
     }
-    if(!window.movieIsPaused) {
+    if(!window.movie.paused) {
         setTimeout( () => tickDisplayedPointCloud(iNext, ms, step), ms)
     }
 }
@@ -25,13 +27,10 @@ const circularSlice = (arr, start, end) => {
     }
 }
 
-window.movieIsPaused = true
-
 const startMovie = () => {
-    window.movieIsPaused = false
+    window.movie.paused = false
     tickDisplayedPointCloud(0, 500, 1)
 }
-
 
 // takes an array of objects {name: "lion", path: "./lion/ept.json"} 
 const loadPointcloudsInOrder = async (resources) => {
@@ -48,9 +47,8 @@ const loadPointcloudsInOrder = async (resources) => {
     return pointclouds
 }
 
-
 const glacierInit = async () => {
-    const pointclouds = await loadPointcloudsInOrder(window.movieResources)
+    const pointclouds = await loadPointcloudsInOrder(window.movie.resources)
     for(const pointcloud of pointclouds) {
         pointcloud.visible = false
 
