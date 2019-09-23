@@ -13,9 +13,11 @@
 	<link rel="stylesheet" type="text/css" href="../libs/openlayers3/ol.css">
 	<link rel="stylesheet" type="text/css" href="../libs/spectrum/spectrum.css">
 	<link rel="stylesheet" type="text/css" href="../libs/jstree/themes/mixed/style.css">
+    <link rel="stylesheet" type="text/css" href="../libs/nouislider/nouislider.css">
 </head>
 
 <body>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
 	<script src="../libs/jquery/jquery-3.1.1.min.js"></script>
 	<script src="../libs/spectrum/spectrum.js"></script>
 	<script src="../libs/perfect-scrollbar/js/perfect-scrollbar.jquery.js"></script>
@@ -30,6 +32,7 @@
 	<script src="../libs/jstree/jstree.js"></script>
 	<script src="../build/potree/potree.js"></script>
 	<script src="../libs/plasio/js/laslaz.js"></script>
+    <script src="../libs/nouislider/nouislider.js"></script>
     <script src="./movieResources.js"></script>
     <script src="./movie.js"></script>
 
@@ -37,24 +40,80 @@
 	<!-- INCLUDE SETTINGS HERE -->
 
 	<div class="potree_container" style="position: absolute; width: 100%; height: 100%; left: 0px; top: 0px; ">
-		<div id="potree_render_area"></div>
-		<div id="potree_sidebar_container"> </div>
+		<div style='left: 370px' id="potree_render_area"></div>
+		<div style='border-width: 10px; border-color: white; border-style: solid; display: block; left: 0px' id="potree_sidebar_container">
+            <h1> Graphics Settings </h1>
+            <h2> Point Budget </h2>
+            <p> <span id='point-budget-val'> </span> </p>
+            <div id="point-budget-slider"></div>
+            <h2> Frame Speed </h2>
+            <p> <span id='frame-speed-val'> </span> </p>
+            <div id="frame-speed-slider"></div>
+            <h2> Look Ahead </h2>
+            <p> <span id='look-ahead-val'> </span> frames</p>
+            <div id="look-ahead-slider"></div>
+        </div>
 	</div>
 
+    <!--<script src="https://unpkg.com/react@16/umd/react.development.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@16/umd/react-dom.development.js" crossorigin></script>
+    <script type='text/babel' src="./react-stuff.js"></script> -->
 	<script>
 		window.viewer = new Potree.Viewer(document.getElementById("potree_render_area"));
 
 		viewer.setEDLEnabled(true);
 		viewer.setFOV(60);
-		viewer.setPointBudget(2*1000*1000);
+		viewer.setPointBudget(1000*1000);
 		viewer.loadSettingsFromURL();
 
 		viewer.setDescription("Loading Entwine-generated EPT format");
 
+        /*
 		viewer.loadGUI(() => {
 			viewer.setLanguage('en');
 			$("#menu_appearance").next().show();
 		});
+        */
+
+        let pointBudgetSliderElement = document.getElementById('point-budget-slider')
+        let pointBudgetVal = document.getElementById('point-budget-val')
+        let pointBudgetSlider = noUiSlider.create(pointBudgetSliderElement, {
+            start: [6],
+            range: { min: 5, max: 7 }
+        })
+        pointBudgetSlider.on('update', (values, handle) => {
+            let pb = Number(Math.floor(Math.pow(10, values[handle])))
+            pointBudgetVal.innerHTML = pb.toLocaleString()
+            viewer.setPointBudget(pb)
+        })
+
+        let frameSpeedSliderElement = document.getElementById('frame-speed-slider')
+        let frameSpeedVal = document.getElementById('frame-speed-val')
+        let frameSpeedSlider = noUiSlider.create(frameSpeedSliderElement, {
+            start: [3],
+            range: { min: 2, max: 4 }
+        })
+        frameSpeedSlider.on('update', (values, handle) => {
+            let period = Number(Math.floor(Math.pow(10, values[handle])))
+            window.movie.speed = period
+            let fps = 1000/period
+            frameSpeedVal.innerHTML = `${period} ms per frame (${fps.toFixed(2)} FPS)`
+        })
+
+        let lookAheadSliderElement = document.getElementById('look-ahead-slider')
+        let lookAheadVal = document.getElementById('look-ahead-val')
+        let lookAheadSlider = noUiSlider.create(lookAheadSliderElement, {
+            start: [6],
+            step: 1,
+            range: { min: 1, max: 10 }
+        })
+        lookAheadSlider.on('update', (values, handle) => {
+            let val = Number(values[handle])
+            window.movie.preload = val
+            lookAheadVal.innerHTML = val
+        })
+
+
 
         glacierInit()
 
