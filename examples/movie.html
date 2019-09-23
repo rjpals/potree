@@ -52,6 +52,8 @@
             <h2> Look Ahead </h2>
             <p> <span id='look-ahead-val'> </span> frames</p>
             <div id="look-ahead-slider"></div>
+            <br>
+            <button id='pause'>  &#9646&#9646 </button>
         </div>
 	</div>
 
@@ -97,7 +99,7 @@
             let period = Number(Math.floor(Math.pow(10, values[handle])))
             window.movie.speed = period
             let fps = 1000/period
-            frameSpeedVal.innerHTML = `${period} ms per frame (${fps.toFixed(2)} FPS)`
+            frameSpeedVal.innerHTML = `${period.toLocaleString()} ms per frame (${fps.toFixed(2)} FPS)`
         })
 
         let lookAheadSliderElement = document.getElementById('look-ahead-slider')
@@ -112,6 +114,20 @@
             window.movie.preload = val
             lookAheadVal.innerHTML = val
         })
+
+        let pauseButton = document.getElementById('pause')
+        pauseButton.onclick = () => {
+            const play = '&#9654'
+            const pause = '&#9646&#9646'
+            if(window.movie.paused) {
+                window.movie.paused = false
+                tickDisplayedPointCloud()
+                pauseButton.innerHTML = pause
+            } else {
+                window.movie.paused = true
+                pauseButton.innerHTML = play
+            }
+        }
 
 
 

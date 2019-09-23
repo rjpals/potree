@@ -1,21 +1,21 @@
 window.movie.paused = true
 
 const tickDisplayedPointCloud = () => {
-    const pcs = window.viewer.scene.pointclouds
-    const {preload, activePC} = window.movie
-    if(pcs.length > 0) {
-        activeRange = circularSlice(pcs, activePC, activePC + preload)
-        hiddenRange = circularSlice(pcs, activePC + preload, activePC)
-        activeRange.forEach(pc => pc.visible = true)
-        hiddenRange.forEach(pc => pc.visible = false)
-
-        psid = window.movie.PSIDs[`South_${activeRange[0].name}`]
-        window.viewer.setFilterPointSourceIDRange(psid - 0.5, psid + 0.5)
-    }
     if(!window.movie.paused) {
+        const pcs = window.viewer.scene.pointclouds
+        const {preload, activePC} = window.movie
+        if(pcs.length > 0) {
+            activeRange = circularSlice(pcs, activePC, activePC + preload)
+            hiddenRange = circularSlice(pcs, activePC + preload, activePC)
+            activeRange.forEach(pc => pc.visible = true)
+            hiddenRange.forEach(pc => pc.visible = false)
+
+            psid = window.movie.PSIDs[`South_${activeRange[0].name}`]
+            window.viewer.setFilterPointSourceIDRange(psid - 0.5, psid + 0.5)
+        }
         window.movie.activePC++
-        setTimeout( () => tickDisplayedPointCloud(), window.movie.speed)
     }
+    setTimeout( () => tickDisplayedPointCloud(), window.movie.speed)
 }
 
 const circularSlice = (arr, start, end) => {
