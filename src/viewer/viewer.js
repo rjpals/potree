@@ -1792,11 +1792,8 @@ export class Viewer extends EventDispatcher{
 	}
 
 	loop(timestamp){
-        const delay = 1000 * ( 1/(window.fps | 60) - this.clock.getDelta)
-		setTimeout(
-            () => requestAnimationFrame(this.loop.bind(this)),
-            delay
-        );
+		const delay = 1000/(window.fps || 60)
+		setTimeout( () => requestAnimationFrame(this.loop.bind(this)), delay);
 
 		let queryAll;
 		if(Potree.measureTimings){
